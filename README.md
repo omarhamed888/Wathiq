@@ -1,11 +1,3 @@
-You are absolutely right to point that out, my apologies. The issue was a subtle but critical misreading on my part. The filenames start with "Al" (A, lowercase L), not "AI" (A, uppercase I). This caused the 404 "Not Found" errors because the links were pointing to non-existent files.
-
-I have now corrected all the filenames to match your `Photos` directory exactly. This version should render all the images correctly.
-
-Here is the fully corrected file:
-
-***
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/omarhamed888/Wathiq/main/Photos/Logo.jpg" width="150" alt="Wathiq AI Logo">
 </p>
