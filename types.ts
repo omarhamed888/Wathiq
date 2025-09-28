@@ -12,10 +12,11 @@ export interface User {
     current_streak: number;
   };
   badges?: string[];
+  profile_photo_base64?: string;
 }
 
 export interface DetailedFinding {
-  category: 'Anatomy & Proportions' | 'Lighting & Shadows' | 'Background & Environment' | 'Texture & Detail' | 'AI Artifacts' | 'Other';
+  category: 'Anatomy & Proportions' | 'Lighting & Shadows' | 'Background & Environment' | 'Texture & Detail' | 'AI Artifacts' | 'Facial & Speech Analysis' | 'Scene & Object Consistency' | 'Audio-Visual Sync' | 'Compression & Artifacts' | 'Other';
   finding: string;
   severity: 'Low' | 'Medium' | 'High';
 }

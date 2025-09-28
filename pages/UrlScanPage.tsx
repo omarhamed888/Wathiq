@@ -10,15 +10,16 @@ import type { UrlAnalysisResult } from '../types';
 
 const ResultsDisplay = ({ result, url, onReset }: { result: UrlAnalysisResult, url: string, onReset: () => void }) => {
     const verdictInfo = {
-        'Safe': { icon: CheckCircle, title: 'URL Appears Safe', bg: 'from-green-100 to-emerald-100', textColor: 'text-green-900' },
-        'Caution': { icon: AlertTriangle, title: 'Exercise Caution', bg: 'from-yellow-100 to-orange-100', textColor: 'text-orange-900' },
-        'Dangerous': { icon: Shield, title: 'High Risk URL', bg: 'from-red-100 to-rose-100', textColor: 'text-red-900' },
-        'Unknown': { icon: InfoIcon, title: 'Analysis Inconclusive', bg: 'from-slate-200 to-gray-200', textColor: 'text-gray-900' }
+        'Safe': { icon: CheckCircle, title: 'URL Appears Safe', bg: 'from-green-100 to-emerald-100 dark:from-green-900/50 dark:to-emerald-900/50', textColor: 'text-green-900 dark:text-green-200' },
+        'Caution': { icon: AlertTriangle, title: 'Exercise Caution', bg: 'from-yellow-100 to-orange-100 dark:from-yellow-900/50 dark:to-orange-900/50', textColor: 'text-orange-900 dark:text-orange-200' },
+        'Dangerous': { icon: Shield, title: 'High Risk URL', bg: 'from-red-100 to-rose-100 dark:from-red-900/50 dark:to-rose-900/50', textColor: 'text-red-900 dark:text-red-200' },
+        'Unknown': { icon: InfoIcon, title: 'Analysis Inconclusive', bg: 'from-slate-200 to-gray-200 dark:from-slate-700 dark:to-gray-800', textColor: 'text-gray-900 dark:text-gray-200' }
     }[result.verdict];
     const VerdictIcon = verdictInfo.icon;
     
     return (
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+        // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component.
+        <motion.div {...{ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -20 } }}>
             <Card className="shadow-xl border-0 overflow-hidden">
                 <CardHeader className={`bg-gradient-to-r ${verdictInfo.bg} ${verdictInfo.textColor} p-6`}>
                     <div className="flex items-center gap-3">
@@ -31,20 +32,20 @@ const ResultsDisplay = ({ result, url, onReset }: { result: UrlAnalysisResult, u
                 </CardHeader>
                 <CardContent className="p-6 space-y-6">
                     <div>
-                        <h3 className="font-semibold text-slate-900 mb-2 flex items-center gap-2">
-                            <Zap className="w-5 h-5 text-slate-500"/> AI Analysis Summary
+                        <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2">
+                            <Zap className="w-5 h-5 text-slate-500 dark:text-slate-400"/> AI Analysis Summary
                         </h3>
-                        <p className="text-slate-700 leading-relaxed">{result.summary}</p>
+                        <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{result.summary}</p>
                     </div>
 
                     {result.threats_found.length > 0 && (
                         <div>
-                            <h3 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                                <AlertTriangle className="w-5 h-5 text-slate-500"/> Potential Threats
+                            <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-3 flex items-center gap-2">
+                                <AlertTriangle className="w-5 h-5 text-slate-500 dark:text-slate-400"/> Potential Threats
                             </h3>
                             <div className="flex flex-wrap gap-2">
                                 {result.threats_found.map((threat, index) => (
-                                    <span key={index} className="text-xs bg-orange-100 text-orange-800 px-2.5 py-1 rounded-full font-medium">{threat}</span>
+                                    <span key={index} className="text-xs bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-200 px-2.5 py-1 rounded-full font-medium">{threat}</span>
                                 ))}
                             </div>
                         </div>
@@ -52,14 +53,14 @@ const ResultsDisplay = ({ result, url, onReset }: { result: UrlAnalysisResult, u
 
                     {result.sources.length > 0 && (
                          <div>
-                            <h3 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                                <BookOpen className="w-5 h-5 text-slate-500"/> Information Sources
+                            <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-3 flex items-center gap-2">
+                                <BookOpen className="w-5 h-5 text-slate-500 dark:text-slate-400"/> Information Sources
                             </h3>
                             <div className="space-y-2">
                                 {result.sources.map((source, index) => (
-                                    <a href={source.uri} target="_blank" rel="noopener noreferrer" key={index} className="flex items-center gap-3 bg-slate-50 hover:bg-slate-100 p-3 rounded-lg transition-colors duration-200">
-                                        <ExternalLink className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                                        <p className="text-sm text-slate-800 truncate" title={source.title}>{source.title}</p>
+                                    <a href={source.uri} target="_blank" rel="noopener noreferrer" key={index} className="flex items-center gap-3 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 p-3 rounded-lg transition-colors duration-200">
+                                        <ExternalLink className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                                        <p className="text-sm text-slate-800 dark:text-slate-300 truncate" title={source.title}>{source.title}</p>
                                     </a>
                                 ))}
                             </div>
@@ -130,24 +131,26 @@ export default function UrlScanPage() {
     return (
         <div className="p-4 sm:p-6 md:p-8">
             <div className="max-w-2xl mx-auto">
-                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
+                 {/* FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component. */}
+                 <motion.div {...{ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } }} className="text-center mb-8">
                     <div className="w-20 h-20 bg-gradient-to-br from-green-600 to-teal-600 rounded-3xl flex items-center justify-center mx-auto mb-6">
                         <LinkIcon className="w-10 h-10 text-white" />
                     </div>
-                    <h1 className="text-3xl md:text-4xl font-bold text-slate-900">AI URL Safety Scanner</h1>
-                    <p className="mt-2 text-slate-600">Analyze links with AI and Google Search before you click.</p>
+                    <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100">AI URL Safety Scanner</h1>
+                    <p className="mt-2 text-slate-600 dark:text-slate-400">Analyze links with AI and Google Search before you click.</p>
                 </motion.div>
 
                 {error && <Alert variant="destructive" className="mb-6"><AlertTriangle className="h-4 w-4" /><AlertDescription>{error}</AlertDescription></Alert>}
 
                 {!result && (
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+                    // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component.
+                    <motion.div {...{ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } }} className="mb-8">
                          <Card>
                             <CardHeader><CardTitle className="flex items-center gap-2"><Globe className="w-5 h-5" /> Enter URL to Analyze</CardTitle></CardHeader>
                             <CardContent>
                                 <div className="flex flex-col sm:flex-row gap-3">
                                     <Input type="text" placeholder="example.com" value={url} onChange={(e) => setUrl(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleScan()} className="flex-1" />
-                                    <Button onClick={handleScan} disabled={!url.trim() || isScanning} className="bg-green-600 hover:bg-green-700">
+                                    <Button onClick={handleScan} disabled={!url.trim() || isScanning} className="bg-green-600 hover:bg-green-700 text-white">
                                         {isScanning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Analyzing...</> : <><Shield className="w-4 h-4 mr-2" />Analyze URL</>}
                                     </Button>
                                 </div>
@@ -158,18 +161,20 @@ export default function UrlScanPage() {
 
                 <AnimatePresence>
                     {isScanning && (
-                         <motion.div key="loading" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}>
+                         // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component.
+                         <motion.div key="loading" {...{ initial: { opacity: 0, scale: 0.9 }, animate: { opacity: 1, scale: 1 }, exit: { opacity: 0, scale: 0.9 } }}>
                             <Card><CardContent className="p-12 text-center">
                                 <Loader2 className="mx-auto h-12 w-12 text-green-600 animate-spin" />
-                                <p className="mt-4 font-semibold text-slate-800">Analyzing with AI and Google Search...</p>
-                                <p className="text-sm text-slate-500">This may take a moment.</p>
+                                <p className="mt-4 font-semibold text-slate-800 dark:text-slate-200">Analyzing with AI and Google Search...</p>
+                                <p className="text-sm text-slate-500 dark:text-slate-400">This may take a moment.</p>
                             </CardContent></Card>
                         </motion.div>
                     )}
                     {result && !isScanning && <ResultsDisplay result={result} url={url} onReset={reset} />}
                 </AnimatePresence>
                 
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mt-8">
+                {/* FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component. */}
+                <motion.div {...{ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { delay: 0.4 } }} className="mt-8">
                     <Alert>
                         <InfoIcon className="h-4 w-4" />
                         <AlertDescription>

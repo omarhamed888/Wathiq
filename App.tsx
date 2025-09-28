@@ -9,21 +9,24 @@ import NewsVerificationPage from './pages/NewsVerificationPage';
 import LearningPage from './pages/LearningPage';
 import HistoryPage from './pages/HistoryPage';
 import ProfilePage from './pages/ProfilePage';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 export default function App() {
   return (
-    <HashRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/scanner" element={<ScannerPage />} />
-          <Route path="/url-scan" element={<UrlScanPage />} />
-          <Route path="/news-verification" element={<NewsVerificationPage />} />
-          <Route path="/learning" element={<LearningPage />} />
-          <Route path="/history" element={<HistoryPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-        </Routes>
-      </Layout>
-    </HashRouter>
+    <ThemeProvider>
+      <HashRouter>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/scanner" element={<ScannerPage />} />
+            <Route path="/url-scan" element={<UrlScanPage />} />
+            <Route path="/news-verification" element={<NewsVerificationPage />} />
+            <Route path="/learning" element={<LearningPage />} />
+            <Route path="/history" element={<HistoryPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+          </Routes>
+        </Layout>
+      </HashRouter>
+    </ThemeProvider>
   );
 }

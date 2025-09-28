@@ -1,6 +1,9 @@
+
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Scan, Link as LinkIcon, Newspaper, BookOpen, User, History, ShieldCheck } from 'lucide-react';
+import { Home, Scan, Link as LinkIcon, Newspaper, BookOpen, User, History } from 'lucide-react';
+import { Logo } from '../Logo';
+import { ThemeToggle } from '../ThemeToggle';
 
 const navItems = [
   { path: '/', label: 'Home', icon: Home },
@@ -13,17 +16,15 @@ const navItems = [
 ];
 
 const Sidebar: React.FC = () => {
-  const baseClasses = "flex items-center px-4 py-3 text-slate-600 rounded-lg transition-colors duration-200";
-  const activeClasses = "bg-slate-200 text-black shadow-inner";
-  const inactiveClasses = "hover:bg-slate-200";
+  const baseClasses = "flex items-center px-4 py-3 text-slate-600 dark:text-slate-400 rounded-lg transition-colors duration-200";
+  const activeClasses = "bg-slate-200 dark:bg-slate-800 text-black dark:text-white shadow-inner";
+  const inactiveClasses = "hover:bg-slate-200 dark:hover:bg-slate-800";
 
   return (
-    <aside className="w-64 bg-white/80 backdrop-blur-sm border-r border-slate-200/80 p-4 flex flex-col">
-      <div className="flex items-center gap-2 px-4 pb-6 mb-4 border-b border-slate-200">
-          <div className="bg-slate-200 p-2 rounded-lg">
-              <ShieldCheck className="w-6 h-6 text-black" />
-          </div>
-          <h1 className="text-xl font-bold text-slate-800">Wathiq</h1>
+    <aside className="h-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-r border-slate-200/80 dark:border-slate-800 p-4 flex flex-col">
+      <div className="flex items-center gap-3 px-4 pb-6 mb-4 border-b border-slate-200 dark:border-slate-800">
+          <Logo className="w-8 h-8" />
+          <h1 className="text-xl font-bold text-slate-800 dark:text-slate-200">Wathiq</h1>
       </div>
       <nav className="flex-1 space-y-2">
         {navItems.map(({ path, label, icon: Icon }) => (
@@ -38,8 +39,11 @@ const Sidebar: React.FC = () => {
           </NavLink>
         ))}
       </nav>
-       <div className="mt-auto text-center text-xs text-slate-400 p-4">
-        <p>&copy; {new Date().getFullYear()} Wathiq AI. All rights reserved.</p>
+      <div className="mt-auto space-y-2">
+         <ThemeToggle />
+         <div className="text-center text-xs text-slate-400 dark:text-slate-600 p-4">
+            <p>&copy; {new Date().getFullYear()} Wathiq AI. All rights reserved.</p>
+        </div>
       </div>
     </aside>
   );

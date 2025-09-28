@@ -17,16 +17,16 @@ const mockScans: ScanResult[] = [
 ];
 
 const getTrustInfo = (score: number) => {
-    if (score >= 70) return { color: 'text-green-600', Icon: CheckCircle, label: 'Trustworthy' };
-    if (score >= 40) return { color: 'text-yellow-600', Icon: AlertTriangle, label: 'Uncertain' };
-    return { color: 'text-red-600', Icon: Shield, label: 'Suspicious' };
+    if (score >= 70) return { color: 'text-green-600 dark:text-green-400', Icon: CheckCircle, label: 'Trustworthy' };
+    if (score >= 40) return { color: 'text-yellow-600 dark:text-yellow-400', Icon: AlertTriangle, label: 'Uncertain' };
+    return { color: 'text-red-600 dark:text-red-400', Icon: Shield, label: 'Suspicious' };
 }
 
 const getFileInfo = (type: ScanResult['file_type']) => {
-    if (type === 'image') return { Icon: FileImage, color: 'text-blue-600 bg-blue-100' };
-    if (type === 'video') return { Icon: FileVideo, color: 'text-purple-600 bg-purple-100' };
-    if (type === 'audio') return { Icon: FileAudio, color: 'text-green-600 bg-green-100' };
-    return { Icon: FileImage, color: 'text-gray-600 bg-gray-100' };
+    if (type === 'image') return { Icon: FileImage, color: 'text-blue-600 dark:text-blue-300', bgColor: 'bg-blue-100 dark:bg-blue-900/50' };
+    if (type === 'video') return { Icon: FileVideo, color: 'text-purple-600 dark:text-purple-300', bgColor: 'bg-purple-100 dark:bg-purple-900/50' };
+    if (type === 'audio') return { Icon: FileAudio, color: 'text-green-600 dark:text-green-300', bgColor: 'bg-green-100 dark:bg-green-900/50' };
+    return { Icon: FileImage, color: 'text-gray-600 dark:text-gray-300', bgColor: 'bg-gray-100 dark:bg-gray-800' };
 }
 
 export default function HistoryPage() {
@@ -44,12 +44,13 @@ export default function HistoryPage() {
     return (
         <div className="p-4 sm:p-6 md:p-8 min-h-full">
             <div className="max-w-3xl mx-auto">
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
+                {/* FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component. */}
+                <motion.div {...{ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } }} className="text-center mb-8">
                     <div className="w-20 h-20 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6">
                         <HistoryIcon className="w-10 h-10 text-white" />
                     </div>
-                    <h1 className="text-3xl md:text-4xl font-bold text-slate-900">Scan History</h1>
-                    <p className="mt-2 text-slate-600">Review your previous media scans and analysis results.</p>
+                    <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100">Scan History</h1>
+                    <p className="mt-2 text-slate-600 dark:text-slate-400">Review your previous media scans and analysis results.</p>
                 </motion.div>
 
                 <Card className="mb-6">
@@ -71,13 +72,14 @@ export default function HistoryPage() {
                 <div className="space-y-4">
                     {filteredScans.map((scan, index) => {
                         const { Icon: TrustIcon, color: trustColor, label: trustLabel } = getTrustInfo(scan.trust_score);
-                        const { Icon: FileIcon, color: fileColor } = getFileInfo(scan.file_type);
+                        const { Icon: FileIcon, color: fileColor, bgColor: fileBgColor } = getFileInfo(scan.file_type);
                         return (
-                             <motion.div key={scan.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }}>
+                             // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component.
+                             <motion.div key={scan.id} {...{ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { delay: index * 0.05 } }}>
                                 <Card className="hover:shadow-lg transition-shadow duration-300">
                                     <CardContent className="p-4 flex items-start gap-4">
-                                        <div className={`w-12 h-12 ${fileColor} rounded-xl flex items-center justify-center flex-shrink-0`}>
-                                            <FileIcon className="w-6 h-6" />
+                                        <div className={`w-12 h-12 ${fileBgColor} rounded-xl flex items-center justify-center flex-shrink-0`}>
+                                            <FileIcon className={`w-6 h-6 ${fileColor}`} />
                                         </div>
                                         <div className="flex-1">
                                             <div className="flex justify-between items-start">
@@ -85,14 +87,14 @@ export default function HistoryPage() {
                                                     <div className="flex items-center gap-2 mb-1">
                                                         <TrustIcon className={`w-5 h-5 ${trustColor}`} />
                                                         <span className={`font-bold ${trustColor}`}>{scan.trust_score}%</span>
-                                                        <span className="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full">{trustLabel}</span>
+                                                        <span className="text-xs bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-full">{trustLabel}</span>
                                                     </div>
                                                     {/* FIX: The property 'analysis_result' does not exist on type 'ScanResult'. Changed to use the 'summary' property for display. */}
-                                                    <p className="text-sm text-slate-600">{scan.summary}</p>
+                                                    <p className="text-sm text-slate-600 dark:text-slate-400">{scan.summary}</p>
                                                 </div>
                                                  <Button variant="ghost" size="icon" onClick={() => window.open(scan.file_url, '_blank')}><ExternalLink className="w-4 h-4" /></Button>
                                             </div>
-                                            <div className="text-xs text-slate-400 mt-2">
+                                            <div className="text-xs text-slate-400 dark:text-slate-500 mt-2">
                                                 {format(new Date(scan.created_date), "MMM d, yyyy 'at' h:mm a")}
                                             </div>
                                         </div>

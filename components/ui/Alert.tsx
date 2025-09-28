@@ -7,8 +7,8 @@ interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
 interface AlertDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
 
 const variantClasses = {
-  default: 'bg-slate-100 border-slate-200 text-slate-800',
-  destructive: 'bg-red-50 border-red-200 text-red-800',
+  default: 'bg-slate-100 border-slate-200 text-slate-800 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300',
+  destructive: 'bg-red-50 border-red-200 text-red-800 dark:bg-red-900/30 dark:border-red-800/50 dark:text-red-200',
 };
 
 export const Alert: React.FC<AlertProps> = ({ className, variant = 'default', ...props }) => (

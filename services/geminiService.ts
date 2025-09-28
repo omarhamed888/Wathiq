@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import type { GenerateContentResponse } from "@google/genai";
 import { ScanResult, NewsVerificationResult, UrlAnalysisResult, GroundingSource, DetailedFinding, LearningModule } from '../types';
@@ -39,6 +38,49 @@ const imageForensicsSchema = {
                         type: Type.STRING,
                         description: "The area of analysis.",
                         enum: ["Anatomy & Proportions", "Lighting & Shadows", "Background & Environment", "Texture & Detail", "AI Artifacts", "Other"]
+                    },
+                    finding: {
+                        type: Type.STRING,
+                        description: "A detailed description of the specific finding in this category."
+                    },
+                    severity: {
+                        type: Type.STRING,
+                        description: "The severity of the finding as an indicator of manipulation.",
+                        enum: ["Low", "Medium", "High"]
+                    }
+                }
+            }
+        }
+    },
+    required: ["verdict", "trust_score", "summary", "detailed_findings"]
+};
+
+const videoForensicsSchema = {
+    type: Type.OBJECT,
+    properties: {
+        verdict: {
+            type: Type.STRING,
+            description: "A final verdict on the video's authenticity.",
+            enum: ["Likely Authentic", "Potentially Manipulated", "Likely AI-Generated", "High Confidence AI-Generated"]
+        },
+        trust_score: {
+            type: Type.NUMBER,
+            description: "A score from 0 to 100 representing the likelihood the video is authentic. 0 means very likely AI-generated/manipulated, 100 means very likely authentic."
+        },
+        summary: {
+            type: Type.STRING,
+            description: "A concise, one-paragraph summary of the overall analysis and the reasoning behind the verdict."
+        },
+        detailed_findings: {
+            type: Type.ARRAY,
+            description: "A list of specific observations found during the analysis, categorized by area.",
+            items: {
+                type: Type.OBJECT,
+                properties: {
+                    category: {
+                        type: Type.STRING,
+                        description: "The area of analysis for video.",
+                        enum: ["Facial & Speech Analysis", "Scene & Object Consistency", "Audio-Visual Sync", "Compression & Artifacts", "Other"]
                     },
                     finding: {
                         type: Type.STRING,
@@ -171,6 +213,53 @@ Based on this comprehensive analysis, provide a final verdict, a trust score, a 
   } catch (error) {
     console.error("Error analyzing image with Gemini:", error);
     throw new Error("Failed to analyze image. The AI model may be temporarily unavailable.");
+  }
+};
+
+export const analyzeVideo = async (base64Video: string, mimeType: string): Promise<Pick<ScanResult, 'verdict' | 'trust_score' | 'summary' | 'detailed_findings'>> => {
+  if (!API_KEY) {
+    throw new Error("API key for Gemini is not configured.");
+  }
+
+  const prompt = `Act as a forensic video analyst specializing in detecting AI-generated and manipulated videos (deepfakes). Perform a detailed examination of this video. Your analysis should evaluate the following key areas:
+1.  **Facial & Speech Analysis:** Look for unnatural facial movements, lack of blinking, poor lip-sync with the audio, and strange emotional expressions.
+2.  **Scene & Object Consistency:** Analyze if objects or background elements behave consistently throughout the video. Look for illogical changes, flickering, or morphing.
+3.  **Audio-Visual Sync:** Check the synchronization between audio events and visual cues.
+4.  **Compression & Artifacts:** Identify unusual digital artifacts, blurring around faces, or inconsistencies in video quality that might indicate manipulation.
+
+Based on this comprehensive analysis, provide a final verdict, a trust score, a summary, and detailed findings for each category in the requested JSON format.`;
+
+  const videoPart = {
+    inlineData: {
+      mimeType,
+      data: base64Video,
+    },
+  };
+
+  const textPart = { text: prompt };
+
+  try {
+    const response: GenerateContentResponse = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: { parts: [videoPart, textPart] },
+        config: {
+            responseMimeType: "application/json",
+            responseSchema: videoForensicsSchema,
+        }
+    });
+    
+    const resultText = response.text.trim();
+    const parsedResult = JSON.parse(resultText);
+
+    return {
+        verdict: parsedResult.verdict,
+        trust_score: parsedResult.trust_score,
+        summary: parsedResult.summary,
+        detailed_findings: parsedResult.detailed_findings,
+    };
+  } catch (error) {
+    console.error("Error analyzing video with Gemini:", error);
+    throw new Error("Failed to analyze video. The AI model may be temporarily unavailable or the video format may not be supported.");
   }
 };
 
