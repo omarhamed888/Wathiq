@@ -128,6 +128,17 @@ const ScanResultsDisplay = ({ result, onReset }: { result: ScanResult, onReset: 
                     </div>
                 </CardHeader>
                 <CardContent className="p-6">
+                    <div className="mb-6 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800">
+                        {result.file_type === 'image' && (
+                            <img src={result.file_url} alt="Scanned content" className="w-full h-auto object-contain max-h-96" />
+                        )}
+                        {result.file_type === 'video' && (
+                            <video src={result.file_url} controls className="w-full h-auto max-h-96 bg-black rounded-lg">
+                                Your browser does not support the video tag.
+                            </video>
+                        )}
+                    </div>
+                    
                     <div className="border-b border-slate-200 dark:border-slate-700">
                         <nav className="-mb-px flex space-x-4" aria-label="Tabs">
                             <ResultTabButton isActive={activeTab === 'summary'} onClick={() => setActiveTab('summary')}>

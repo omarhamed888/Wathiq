@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
@@ -57,19 +56,19 @@ export default function ProfilePage() {
                     <motion.div {...{ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { delay: 0.2 } }}>
                         <Card className="bg-gradient-to-br from-blue-100 to-teal-100 dark:from-blue-900/50 dark:to-teal-900/50 text-black shadow-xl border-0">
                             <CardContent className="p-6">
-                                <div className="flex flex-col sm:flex-row items-center gap-6">
+                                <div className="flex flex-col items-center gap-4">
                                     <div className="relative group flex-shrink-0">
-                                        <img 
-                                            src={user.profile_photo_base64} 
-                                            alt={user.full_name} 
-                                            className="w-20 h-20 rounded-full object-cover border-2 border-black/20 dark:border-white/20 shadow-lg"
+                                        <img
+                                            src={user.profile_photo_base64}
+                                            alt={user.full_name}
+                                            className="w-32 h-32 rounded-full object-cover border-4 border-black/20 dark:border-white/20 shadow-lg"
                                         />
-                                        <button 
+                                        <button
                                             onClick={handlePhotoUploadClick}
                                             className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                                             aria-label="Change profile picture"
                                         >
-                                            <Edit className="w-6 h-6 text-white" />
+                                            <Edit className="w-8 h-8 text-white" />
                                         </button>
                                         <input
                                             type="file"
@@ -79,9 +78,9 @@ export default function ProfilePage() {
                                             accept="image/png, image/jpeg, image/gif"
                                         />
                                     </div>
-                                    <div className="text-center sm:text-left">
-                                        <h2 className="text-2xl font-bold dark:text-white">{user.full_name}</h2>
-                                        <p className="text-blue-900/80 dark:text-blue-200/80">{user.email}</p>
+                                    <div className="text-center">
+                                        <h2 className="text-3xl font-bold dark:text-white">{user.full_name}</h2>
+                                        <p className="text-blue-900/80 dark:text-blue-200/80 mt-1">{user.email}</p>
                                     </div>
                                 </div>
                             </CardContent>
