@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/user-attachments/assets/9417d3d7-8495-467f-aa02-990714ed4714" width="150" alt="Wathiq AI Logo">
+  <img src="[https://raw.githubusercontent.com/user-attachments/assets/9417d3d7-8495-467f-aa02-990714ed4714](https://github.com/omarhamed888/Wathiq/blob/main/Photos/Logo.jpg)" width="150" alt="Wathiq AI Logo">
 </p>
 
 <h1 align="center">Wathiq AI - Your Digital Safety Toolkit</h1>
