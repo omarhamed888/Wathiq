@@ -1,5 +1,5 @@
 {
-  "name": "Wathiq AI Media Verification",
+  "name": "Wathiq AI",
   "description": "An AI-powered application to detect deepfakes, verify news, check URL safety, and enhance cybersecurity knowledge through interactive learning modules.",
   "requestFramePermissions": [
     "camera"

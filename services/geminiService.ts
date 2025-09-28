@@ -167,7 +167,6 @@ const learningContentSchema = {
     required: ["content", "quiz"]
 };
 
-
 export const analyzeImage = async (base64Image: string, mimeType: string): Promise<Pick<ScanResult, 'verdict' | 'trust_score' | 'summary' | 'detailed_findings'>> => {
   if (!API_KEY) {
     throw new Error("API key for Gemini is not configured.");

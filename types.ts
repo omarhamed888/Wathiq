@@ -75,3 +75,10 @@ export interface NewsVerificationResult {
   key_findings: string[];
   detected_biases: string[];
 }
+
+export interface PasswordAnalysisResult {
+  score: number;
+  verdict: 'Very Weak' | 'Weak' | 'Moderate' | 'Strong' | 'Very Strong';
+  enhancements: string[];
+  positive_points: string[];
+}

@@ -9,24 +9,28 @@ import NewsVerificationPage from './pages/NewsVerificationPage';
 import LearningPage from './pages/LearningPage';
 import HistoryPage from './pages/HistoryPage';
 import ProfilePage from './pages/ProfilePage';
-import { ThemeProvider } from './contexts/ThemeContext';
+import { ThemeProvider, LanguageProvider } from './contexts/ThemeContext';
+import PasswordCheckerPage from './pages/PasswordCheckerPage';
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <HashRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/scanner" element={<ScannerPage />} />
-            <Route path="/url-scan" element={<UrlScanPage />} />
-            <Route path="/news-verification" element={<NewsVerificationPage />} />
-            <Route path="/learning" element={<LearningPage />} />
-            <Route path="/history" element={<HistoryPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-          </Routes>
-        </Layout>
-      </HashRouter>
-    </ThemeProvider>
+    <LanguageProvider>
+        <ThemeProvider>
+          <HashRouter>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/scanner" element={<ScannerPage />} />
+                <Route path="/url-scan" element={<UrlScanPage />} />
+                <Route path="/password-checker" element={<PasswordCheckerPage />} />
+                <Route path="/news-verification" element={<NewsVerificationPage />} />
+                <Route path="/learning" element={<LearningPage />} />
+                <Route path="/history" element={<HistoryPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+              </Routes>
+            </Layout>
+          </HashRouter>
+        </ThemeProvider>
+    </LanguageProvider>
   );
 }

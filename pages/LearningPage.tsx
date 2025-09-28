@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -35,7 +34,7 @@ const LessonView = ({ module, onStartQuiz }: { module: LearningModule, onStartQu
         <CardTitle>{module.title}</CardTitle>
         <div className="prose prose-slate dark:prose-invert max-w-none mt-4 prose-headings:text-black dark:prose-headings:text-white prose-p:text-black dark:prose-p:text-slate-300 prose-strong:text-black dark:prose-strong:text-white prose-li:text-black dark:prose-li:text-slate-300" dangerouslySetInnerHTML={{ __html: simpleMarkdownToHtml(module.content) }} />
         <Button onClick={onStartQuiz} size="lg" className="mt-6 w-full">
-            <BrainCircuit className="mr-2 h-5 w-5" /> Start Quiz
+            <BrainCircuit className="me-2 h-5 w-5" /> Start Quiz
         </Button>
     </div>
 );
@@ -84,14 +83,14 @@ const QuizView = ({ module, onQuizComplete }: { module: LearningModule, onQuizCo
                         }
                         return (
                             <Button key={option} variant="outline" className={buttonClass} disabled={selectedAnswer !== null} onClick={() => handleAnswer(option)}>
-                                {isSelected && (isCorrect ? <Check className="mr-2 flex-shrink-0" /> : <X className="mr-2 flex-shrink-0" />)}
+                                {isSelected && (isCorrect ? <Check className="me-2 flex-shrink-0" /> : <X className="me-2 flex-shrink-0" />)}
                                 <span>{option}</span>
                             </Button>
                         );
                     })}
                 </div>
                 {selectedAnswer && (
-                    // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component.
+                    // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component. */}
                     <motion.div {...{ initial: { opacity: 0, y: 10 }, animate: { opacity: 1, y: 0 } }} className="mt-4 p-4 rounded-lg bg-slate-100 dark:bg-slate-700">
                         <h4 className="font-bold text-slate-800 dark:text-slate-100">Explanation</h4>
                         <p className="text-sm text-slate-600 dark:text-slate-300">{question.explanation}</p>
@@ -115,7 +114,7 @@ const QuizResultsView = ({ score, total, module, onFinish }: { score: number, to
         <p className="text-lg mt-2">You scored <span className="font-bold">{score}</span> out of <span className="font-bold">{total}</span>.</p>
         <p className="text-2xl font-bold text-green-600 dark:text-green-400 my-4">+ {module.points_reward} Points!</p>
         <Button onClick={onFinish} size="lg">
-            <Sparkles className="mr-2 h-5 w-5" /> Continue Your Journey
+            <Sparkles className="me-2 h-5 w-5" /> Continue Your Journey
         </Button>
     </div>
 );
@@ -128,6 +127,47 @@ export default function LearningPage() {
     const [modalView, setModalView] = useState<'details' | 'loading' | 'lesson' | 'quiz' | 'results' | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [quizScore, setQuizScore] = useState(0);
+    const pregenerationStarted = useRef(false);
+
+    // Effect to pre-generate and cache all module content in the background on first load.
+    useEffect(() => {
+        // This ref ensures the generation process is initiated only once.
+        if (pregenerationStarted.current) {
+            return;
+        }
+
+        const preGenerateAllContent = async () => {
+            // Filter for modules that haven't been cached yet.
+            const modulesToGenerate = learningPathModules.filter(m => !moduleCache[m.id]);
+
+            if (modulesToGenerate.length > 0) {
+                console.log(`Pre-generating content for ${modulesToGenerate.length} modules in the background...`);
+                
+                for (const module of modulesToGenerate) {
+                    try {
+                        // Gentle delay to avoid potential API rate limits.
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                        
+                        const content = await generateLearningContent(module);
+                        
+                        cacheModuleContent(module.id, {
+                            content: content.content,
+                            quiz: content.quiz,
+                            module_type: module.module_type,
+                            points_reward: module.points_reward,
+                        });
+                    } catch (err) {
+                        console.error(`Error pre-generating content for "${module.title}":`, err);
+                        // Continue to the next module even if one fails.
+                    }
+                }
+                console.log("Background content generation complete.");
+            }
+        };
+
+        pregenerationStarted.current = true;
+        preGenerateAllContent();
+    }, [moduleCache, cacheModuleContent]);
 
     useEffect(() => {
         const enrichedModules = learningPathModules.map(m => {
@@ -136,6 +176,27 @@ export default function LearningPage() {
         });
         setModules(enrichedModules);
     }, [moduleCache]);
+
+    const firstIncompleteIndex = useMemo(() => modules.findIndex(m => !completedModules.has(m.id)), [modules, completedModules]);
+    
+    const progress = useMemo(() => {
+        if (firstIncompleteIndex === -1) return 1; // all complete
+        if (modules.length <= 1) return 0;
+        // The path should lead up to the first incomplete module.
+        // It covers `firstIncompleteIndex` segments out of a total of `modules.length - 1`.
+        return firstIncompleteIndex / (modules.length - 1);
+    }, [firstIncompleteIndex, modules.length]);
+
+    const pathData = useMemo(() => {
+        if (nodePositions.length < 2) return "";
+        const viewBoxWidth = 800;
+        const viewBoxHeight = 500;
+        const coords = nodePositions.map(pos => ({
+            x: (parseFloat(pos.left) / 100) * viewBoxWidth,
+            y: (parseFloat(pos.top) / 100) * viewBoxHeight,
+        }));
+        return coords.map((c, i) => (i === 0 ? `M ${c.x} ${c.y}` : `L ${c.x} ${c.y}`)).join(" ");
+    }, []);
 
     const handleNodeClick = (module: LearningModule) => {
         setSelectedModule(module);
@@ -184,8 +245,6 @@ export default function LearningPage() {
         setError(null);
     };
 
-    const firstIncompleteIndex = modules.findIndex(m => !completedModules.has(m.id));
-
     return (
         <div className="p-4 sm:p-6 md:p-8 bg-gradient-to-br from-purple-50 via-blue-50 to-teal-50 dark:from-purple-950 dark:via-blue-950 dark:to-teal-950 min-h-full">
             <div className="max-w-4xl mx-auto">
@@ -200,9 +259,26 @@ export default function LearningPage() {
                     </div>
                     
                     <div className="relative w-full h-[70vh] sm:h-[500px] bg-blue-100/50 dark:bg-blue-900/20 rounded-2xl shadow-inner overflow-hidden border border-slate-200 dark:border-slate-800 p-4">
-                        {/* SVG Path */}
+                        {/* Dynamic SVG Path */}
                         <svg width="100%" height="100%" viewBox="0 0 800 500" preserveAspectRatio="none" className="absolute top-0 left-0">
-                            <path d="M 95 95 C 180 170, 220 170, 315 110 C 410 50, 480 150, 560 200 C 640 250, 550 300, 460 300 C 370 300, 250 350, 200 400 C 150 450, 300 450, 400 420" stroke="#a7bbf5" stroke-opacity="0.5" strokeWidth="8" fill="none" strokeLinecap="round" strokeDasharray="20 10"/>
+                             <path
+                                d={pathData}
+                                strokeDasharray="10 8"
+                                strokeLinecap="round"
+                                strokeWidth="5"
+                                className="stroke-slate-300/80 dark:stroke-slate-700/80"
+                                fill="none"
+                            />
+                            <motion.path
+                                d={pathData}
+                                strokeLinecap="round"
+                                strokeWidth="5"
+                                className="stroke-blue-500"
+                                fill="none"
+                                initial={{ pathLength: 0 }}
+                                animate={{ pathLength: progress }}
+                                transition={{ duration: 1.5, ease: "easeInOut", delay: 0.5 }}
+                            />
                         </svg>
 
                         {/* Module Nodes */}
@@ -220,7 +296,7 @@ export default function LearningPage() {
                             else statusClasses = 'bg-white border-slate-300 text-slate-600 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-300';
 
                             return (
-                                // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component.
+                                // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component. */}
                                 <motion.div
                                     key={module.id}
                                     {...{
@@ -250,7 +326,7 @@ export default function LearningPage() {
                 
                 <AnimatePresence>
                     {selectedModule && (
-                        // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component.
+                        // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component. */}
                         <motion.div
                             {...{
                                 initial: { opacity: 0 },
@@ -268,7 +344,7 @@ export default function LearningPage() {
                                 }}
                                 className="relative w-full max-w-2xl bg-white dark:bg-slate-800 rounded-2xl shadow-2xl overflow-hidden"
                             >
-                                <Button variant="ghost" size="icon" onClick={closeModal} className="absolute top-2 right-2 z-10 rounded-full"><XCircle/></Button>
+                                <Button variant="ghost" size="icon" onClick={closeModal} className="absolute top-2 end-2 z-10 rounded-full"><XCircle/></Button>
                                 {modalView === 'details' && (
                                      <div className="p-6 text-center">
                                         <CardTitle className="text-2xl mb-2">{selectedModule.title}</CardTitle>

@@ -7,7 +7,7 @@ interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {}
 interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const Card: React.FC<CardProps> = ({ className, children, ...props }) => (
-  <div className={`bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm shadow-lg border border-slate-200/50 dark:border-slate-700/50 rounded-2xl ${className}`} {...props}>
+  <div className={`bg-white dark:bg-slate-900 shadow-lg border border-slate-200/50 dark:border-slate-800 rounded-2xl ${className}`} {...props}>
     {children}
   </div>
 );

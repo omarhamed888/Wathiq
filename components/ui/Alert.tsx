@@ -14,7 +14,7 @@ const variantClasses = {
 export const Alert: React.FC<AlertProps> = ({ className, variant = 'default', ...props }) => (
   <div
     role="alert"
-    className={`relative w-full rounded-lg border p-4 [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg+div]:translate-y-[-3px] [&>svg~*]:pl-7 ${variantClasses[variant]} ${className}`}
+    className={`relative w-full rounded-lg border p-4 [&>svg]:absolute [&>svg]:start-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg+div]:translate-y-[-3px] [&>svg~*]:ps-7 ${variantClasses[variant]} ${className}`}
     {...props}
   />
 );

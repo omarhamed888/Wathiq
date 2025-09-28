@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
@@ -18,7 +19,7 @@ const ResultsDisplay = ({ result, url, onReset }: { result: UrlAnalysisResult, u
     const VerdictIcon = verdictInfo.icon;
     
     return (
-        // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component.
+        // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component. */}
         <motion.div {...{ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -20 } }}>
             <Card className="shadow-xl border-0 overflow-hidden">
                 <CardHeader className={`bg-gradient-to-r ${verdictInfo.bg} ${verdictInfo.textColor} p-6`}>
@@ -143,7 +144,7 @@ export default function UrlScanPage() {
                 {error && <Alert variant="destructive" className="mb-6"><AlertTriangle className="h-4 w-4" /><AlertDescription>{error}</AlertDescription></Alert>}
 
                 {!result && (
-                    // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component.
+                    // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component. */}
                     <motion.div {...{ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } }} className="mb-8">
                          <Card>
                             <CardHeader><CardTitle className="flex items-center gap-2"><Globe className="w-5 h-5" /> Enter URL to Analyze</CardTitle></CardHeader>
@@ -151,7 +152,7 @@ export default function UrlScanPage() {
                                 <div className="flex flex-col sm:flex-row gap-3">
                                     <Input type="text" placeholder="example.com" value={url} onChange={(e) => setUrl(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleScan()} className="flex-1" />
                                     <Button onClick={handleScan} disabled={!url.trim() || isScanning} className="bg-green-600 hover:bg-green-700 text-white">
-                                        {isScanning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Analyzing...</> : <><Shield className="w-4 h-4 mr-2" />Analyze URL</>}
+                                        {isScanning ? <><Loader2 className="w-4 h-4 me-2 animate-spin" />Analyzing...</> : <><Shield className="w-4 h-4 me-2" />Analyze URL</>}
                                     </Button>
                                 </div>
                             </CardContent>
@@ -161,7 +162,7 @@ export default function UrlScanPage() {
 
                 <AnimatePresence>
                     {isScanning && (
-                         // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component.
+                         // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component. */}
                          <motion.div key="loading" {...{ initial: { opacity: 0, scale: 0.9 }, animate: { opacity: 1, scale: 1 }, exit: { opacity: 0, scale: 0.9 } }}>
                             <Card><CardContent className="p-12 text-center">
                                 <Loader2 className="mx-auto h-12 w-12 text-green-600 animate-spin" />

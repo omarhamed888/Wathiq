@@ -35,7 +35,7 @@ const ResultsDisplay = ({ result, onReset }: { result: NewsVerificationResult, o
     );
 
     return (
-        // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component.
+        // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component. */}
         <motion.div {...{ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -20 } }} className="space-y-6">
             <Card className="shadow-xl border-0 overflow-hidden">
                 <CardHeader className={`bg-gradient-to-r ${info.bg} ${info.textColor} p-6`}>
@@ -133,7 +133,7 @@ export default function NewsVerificationPage() {
                 {error && <Alert variant="destructive" className="mb-6"><AlertTriangle className="h-4 w-4" /><AlertDescription>{error}</AlertDescription></Alert>}
 
                 {!result && !isChecking && (
-                    // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component.
+                    // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component. */}
                     <motion.div {...{ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } }} className="mb-8">
                          <Card>
                             <CardHeader><CardTitle className="flex items-center gap-2"><Search className="w-5 h-5" /> Enter a headline or claim to analyze</CardTitle></CardHeader>
@@ -145,7 +145,7 @@ export default function NewsVerificationPage() {
                                     onKeyPress={(e) => e.key === 'Enter' && handleCheck()}
                                 />
                                 <Button onClick={handleCheck} disabled={!query.trim() || isChecking} size="lg" className="w-full bg-orange-600 hover:bg-orange-700 text-white">
-                                    {isChecking ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Performing Deep Analysis...</> : <><Search className="w-4 h-4 mr-2" />Analyze News</>}
+                                    {isChecking ? <><Loader2 className="w-4 h-4 me-2 animate-spin" />Performing Deep Analysis...</> : <><Search className="w-4 h-4 me-2" />Analyze News</>}
                                 </Button>
                             </CardContent>
                          </Card>
@@ -154,7 +154,7 @@ export default function NewsVerificationPage() {
                 
                  <AnimatePresence>
                     {isChecking && (
-                         // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component.
+                         // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component. */}
                          <motion.div key="loading" {...{ initial: { opacity: 0, scale: 0.9 }, animate: { opacity: 1, scale: 1 }, exit: { opacity: 0, scale: 0.9 } }}>
                             <Card><CardContent className="p-12 text-center">
                                 <Loader2 className="mx-auto h-12 w-12 text-orange-600 animate-spin" />

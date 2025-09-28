@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
@@ -57,8 +58,8 @@ export default function HistoryPage() {
                     <CardContent className="p-4">
                         <div className="flex flex-col md:flex-row gap-4">
                             <div className="relative flex-1">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                                <Input placeholder="Search results..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-10" />
+                                <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                                <Input placeholder="Search results..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="ps-10" />
                             </div>
                             <div className="flex items-center gap-2">
                                 {['all', 'image', 'video', 'audio'].map(type => (
@@ -74,7 +75,7 @@ export default function HistoryPage() {
                         const { Icon: TrustIcon, color: trustColor, label: trustLabel } = getTrustInfo(scan.trust_score);
                         const { Icon: FileIcon, color: fileColor, bgColor: fileBgColor } = getFileInfo(scan.file_type);
                         return (
-                             // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component.
+                             // FIX: The framer-motion props (`initial`, `animate`, `exit`, etc.) were causing type errors. Spreading them from within an object (`{...{...}}`) is a workaround for potential type inference issues with the `motion` component. */}
                              <motion.div key={scan.id} {...{ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { delay: index * 0.05 } }}>
                                 <Card className="hover:shadow-lg transition-shadow duration-300">
                                     <CardContent className="p-4 flex items-start gap-4">
