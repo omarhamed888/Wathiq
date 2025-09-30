@@ -50,6 +50,11 @@
   </tr>
 </table>
 
+## 🎥 Demo & Presentation
+
+*   **Video Explanation**: [Watch a full walkthrough of the code and features on Google Drive](https://drive.google.com/file/d/1oHqNXE-oFH32i1dwjJtClinF7bVbgQoA/view?usp=sharing)
+*   **Project Presentation**: [View the project slides on Google Slides](https://docs.google.com/presentation/d/1vR4wBY2WLVAYwsOWSUzA-Y9vp9z1Z-F-/edit?usp=sharing&ouid=111384372343749542344&rtpof=true&sd=true)
+
 ## 📋 Table of Contents
 - [About The Project](#-about-the-project)
 - [Key Features](#-key-features)
@@ -97,53 +102,3 @@ To get a local copy up and running, follow these simple steps.
 ```bash
 git clone https://github.com/your-username/wathiq-ai.git
 cd wathiq-ai
-```
-2. **Install NPM packages:**
-```bash
-npm install
-```
-3. **Set up environment variables:**
-   - Create a new file named `.env` in the project root.
-   - Add your Google Gemini API key to the `.env` file:
-```env
-API_KEY=YOUR_GEMINI_API_KEY_HERE
-```
-> **Security Note**: This project uses the API key on the client-side for demonstration purposes. In a production environment, you **must** proxy API calls through a secure backend to protect your key.
-4. **Run the development server:**
-```bash
-npm start
-```
-The application will be available at `http://localhost:3000` (or the next available port).
-
-## 📂 Project Structure
-The project follows a standard React application structure, organized for clarity and scalability.
-
-```
-/
-├── public/              # Public assets and index.html
-├── src/
-│   ├── components/      # Reusable UI and layout components
-│   │   ├── layout/
-│   │   └── ui/
-│   ├── contexts/        # React contexts (Theme, Language)
-│   ├── hooks/           # Custom hooks (e.g., useUserProgress)
-│   ├── pages/           # Page components for each route
-│   ├── services/        # API interaction layers (geminiService.ts)
-│   ├── utils/           # Helper functions
-│   ├── App.tsx          # Main app component with routing
-│   └── index.tsx        # Application entry point
-├── .env.example         # Example environment variables
-├── package.json
-└── README.md
-```
-
-## 🤝 Contributing
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**. If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-Distributed under the MIT License. This project is open-source and you are free to use and modify it.
