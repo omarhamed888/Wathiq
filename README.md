@@ -53,22 +53,20 @@
 
 ## 🎥 Video Presentation  
 
-✅ As required by the competition rules, you can watch the official *15-minute version* [here](https://drive.google.com/file/d/1oHqNXE-oFH32i1dwjJtClinF7bVbgQoA/view?usp=sharing)
+✅ As required by the competition rules, 
+you can watch the official *15-minute version* 
+[here](https://drive.google.com/file/d/1oHqNXE-oFH32i1dwjJtClinF7bVbgQoA/view?usp=sharing)
 
-📊 For a clearer, slower-paced version with more detailed statistics, you can watch the *20-minute extended version* [here] (https://drive.google.com/file/d/1HRUxDoAuTlN2J2z9zodkREcGLtRnmGP4/view?usp=sharing)
+📊 For a clearer, 
+slower-paced version with more detailed statistics, 
+you can watch the *20-minute extended version* 
+[here](https://drive.google.com/file/d/1HRUxDoAuTlN2J2z9zodkREcGLtRnmGP4/view?usp=sharing)
 
 ---
 
 ## 📑 Presentation
 
 📂 Look at the slides [here](https://docs.google.com/presentation/d/1vR4wBY2WLVAYwsOWSUzA-Y9vp9z1Z-F-/edit?usp=sharing&ouid=111384372343749542344&rtpof=true&sd=true)
-
-
-
-
-
-
-
 
 
 
